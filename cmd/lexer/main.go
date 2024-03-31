@@ -3,21 +3,23 @@ package main
 import (
 	"cingo/lexer"
 	"fmt"
-	"regexp"
 
 	"github.com/charmbracelet/log"
 )
 
-var regexMap = map[string]*regexp.Regexp{
-	"Semicolon": regexp.MustCompile(`^;`),
-}
-
 func main() {
-	input := ""
-	tokens, err := lexer.Lex(input, regexMap)
+	input := `
+	int	main	(	void)	{	return	0	;	}
+	`
+	tokens, err := lexer.Lex(input, lexer.DefaultRegexMap)
 	if err != nil {
 		log.Fatalf(err.Error())
 	}
 
-	fmt.Println(tokens)
+	fmt.Println("+----------+--------------------+")
+	fmt.Println("|     Value     |        Type       |")
+	fmt.Println("+----------+--------------------+")
+	for _, token := range tokens {
+		fmt.Printf("| %-15v | %-20v |\n", token.Value, token.Type)
+	}
 }
